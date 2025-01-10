@@ -1,0 +1,321 @@
+# Family Wish List Project Documentation
+
+## Project Overview
+A web application that enables family members to create and manage wish lists, with a parent and admin approval workflow. The system includes user management, wish list creation, and content management capabilities.
+
+## Technology Stack
+- Frontend: Angular with Tailwind CSS
+- Backend: C# .NET
+- Database: Azure SQL Database
+- Authentication: Azure AD B2C
+- Email Service: Azure Communication Services
+- Hosting: Azure
+
+## Core Features
+1. Authentication & Authorization
+2. Wish List Management
+3. Approval Workflow
+4. Admin Management
+5. Content Management
+6. Email Notifications
+
+## User Stories by Feature
+
+### Authentication & Authorization
+
+#### User Stories
+1. **Login Functionality**
+   ```
+   As a user
+   I want to log in with my username and password
+   So that I can access my wish list
+   
+   Acceptance Criteria:
+   - Username and password fields are provided
+   - Password visibility can be toggled
+   - Successful login redirects to wish list page
+   - Failed login shows clear error message
+   ```
+
+2. **Logout Functionality**
+   ```
+   As a user
+   I want to log out of the system
+   So that my account remains secure
+   
+   Acceptance Criteria:
+   - Logout button is easily accessible
+   - Session is terminated on logout
+   - User is redirected to landing page
+   ```
+
+3. **Admin Access**
+   ```
+   As an admin
+   I want to access admin-specific pages
+   So that I can manage the system
+   
+   Acceptance Criteria:
+   - Admin pages are only visible to admin users
+   - Navigation includes admin-specific links
+   - Unauthorized access attempts are blocked
+   ```
+
+### Wish List Management
+
+#### User Stories
+1. **View Wish List**
+   ```
+   As a user
+   I want to view my wish list and spending limit
+   So that I can manage my gift requests
+   
+   Acceptance Criteria:
+   - Spending limit is clearly displayed
+   - Current wish list items are shown
+   - Silly description is visible
+   ```
+
+2. **Add Wish List Items**
+   ```
+   As a user
+   I want to add items to my wish list
+   So that I can request specific gifts
+   
+   Acceptance Criteria:
+   - Can add items via URL or manual entry
+   - Manual entry includes item name, description, quantity
+   - Items are saved immediately
+   ```
+
+3. **Edit/Delete Items**
+   ```
+   As a user
+   I want to modify or remove wish list items
+   So that I can keep my list current
+   
+   Acceptance Criteria:
+   - Edit functionality for existing items
+   - Delete functionality with confirmation
+   - Changes are saved immediately
+   ```
+
+4. **Submit Wish List**
+   ```
+   As a user
+   I want to submit my wish list for approval
+   So that it can be reviewed by parents and admin
+   
+   Acceptance Criteria:
+   - Submit button is clearly visible
+   - Confirmation dialog before submission
+   - Email notifications sent to parent and admin
+   ```
+
+### Approval Workflow
+
+#### User Stories
+1. **Parent Approval**
+   ```
+   As a parent
+   I want to approve or reject wish lists
+   So that I can review gift requests
+   
+   Acceptance Criteria:
+   - View submitted wish lists
+   - Approve/reject functionality
+   - Add feedback for rejections
+   - Email notification sent upon decision
+   ```
+
+2. **Admin Approval**
+   ```
+   As an admin
+   I want to approve or reject wish lists after parent approval
+   So that I can ensure appropriate gift requests
+   
+   Acceptance Criteria:
+   - View parent-approved wish lists
+   - Final approve/reject functionality
+   - Email notification sent to parent
+   ```
+
+### Admin Management
+
+#### User Stories
+1. **User Management**
+   ```
+   As an admin
+   I want to manage user accounts
+   So that I can control system access
+   
+   Acceptance Criteria:
+   - Create new users
+   - Edit user details
+   - Delete users
+   - Set spending limits
+   - Add/edit silly descriptions
+   ```
+
+2. **Wish List Overview**
+   ```
+   As an admin
+   I want to view all wish lists
+   So that I can monitor gift requests
+   
+   Acceptance Criteria:
+   - Table view of all wish lists
+   - Filter and sort functionality
+   - Status indicators
+   - Export capability
+   ```
+
+### Content Management
+
+#### User Stories
+1. **Hero Section Management**
+   ```
+   As an admin
+   I want to update the hero section
+   So that I can keep the landing page fresh
+   
+   Acceptance Criteria:
+   - Edit text content
+   - Upload/modify animations
+   - Preview changes
+   - Publish/unpublish functionality
+   ```
+
+### Email Notifications
+
+#### User Stories
+1. **System Notifications**
+   ```
+   As a system
+   I need to send email notifications
+   So that users are informed of important events
+   
+   Acceptance Criteria:
+   - Wish list submission notifications
+   - Approval/rejection notifications
+   - User account creation notifications
+   - Email template management
+   ```
+
+## Database Schema
+Already Added - 12-2-24
+### Users Table
+```sql
+CREATE TABLE Users (
+    UserId INT PRIMARY KEY IDENTITY(1,1),
+    Username NVARCHAR(50) UNIQUE NOT NULL,
+    PasswordHash NVARCHAR(256) NOT NULL,
+    IsAdmin BIT NOT NULL DEFAULT 0,
+    IsParent BIT NOT NULL DEFAULT 0,
+    SpendingLimit DECIMAL(10,2),
+    SillyDescription NVARCHAR(500),
+    Email NVARCHAR(100) NOT NULL,
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    LastModifiedDate DATETIME DEFAULT GETDATE()
+)
+```
+
+### WishListItems Table
+```sql
+CREATE TABLE WishListItems (
+    ItemId INT PRIMARY KEY IDENTITY(1,1),
+    UserId INT FOREIGN KEY REFERENCES Users(UserId),
+    ItemName NVARCHAR(100) NOT NULL,
+    Description NVARCHAR(500),
+    Quantity INT NOT NULL DEFAULT 1,
+    ProductUrl NVARCHAR(500),
+    DateAdded DATETIME DEFAULT GETDATE(),
+    LastModified DATETIME DEFAULT GETDATE()
+)
+```
+
+### WishListSubmissions Table
+```sql
+CREATE TABLE WishListSubmissions (
+    SubmissionId INT PRIMARY KEY IDENTITY(1,1),
+    UserId INT FOREIGN KEY REFERENCES Users(UserId),
+    SubmissionDate DATETIME DEFAULT GETDATE(),
+    ParentApprovalStatus NVARCHAR(20),
+    AdminApprovalStatus NVARCHAR(20),
+    LastModified DATETIME DEFAULT GETDATE()
+)
+```
+
+### HeroContent Table
+```sql
+CREATE TABLE HeroContent (
+    ContentId INT PRIMARY KEY IDENTITY(1,1),
+    Title NVARCHAR(100) NOT NULL,
+    Description NVARCHAR(500),
+    AnimationData NVARCHAR(MAX),
+    IsActive BIT NOT NULL DEFAULT 0,
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    LastModifiedDate DATETIME DEFAULT GETDATE()
+)
+```
+
+## API Endpoints
+
+### Authentication
+- POST /api/auth/login
+- POST /api/auth/logout
+
+### Wish List Management
+- GET /api/wishlist
+- POST /api/wishlist/item
+- PUT /api/wishlist/item/{id}
+- DELETE /api/wishlist/item/{id}
+- POST /api/wishlist/submit
+
+### Approval Workflow
+- PUT /api/wishlist/{id}/parent-approval
+- PUT /api/wishlist/{id}/admin-approval
+
+### Admin Management
+- GET /api/admin/users
+- POST /api/admin/users
+- PUT /api/admin/users/{id}
+- DELETE /api/admin/users/{id}
+- GET /api/admin/wishlists
+
+### Content Management
+- GET /api/content/hero
+- PUT /api/content/hero
+
+## Getting Started
+1. Clone the repository
+2. Set up Azure resources (SQL Database, AD B2C, Communication Services)
+3. Configure environment variables
+4. Run database migrations
+5. Start the development servers
+
+## Development Workflow
+1. Create a new branch for each user story
+2. Follow Angular component guidelines
+3. Implement API endpoints with proper error handling
+4. Write unit tests for both frontend and backend
+5. Submit pull request for review
+
+## Deployment
+1. Build Angular production assets
+2. Deploy API to Azure App Service
+3. Update database schema if needed
+4. Configure Azure AD B2C
+5. Set up email service
+6. Update environment variables
+
+## Version Control
+- Main branch: Production code
+- Develop branch: Integration branch
+- Feature branches: Individual user stories
+
+## Contact
+[Your Contact Information]
+
+## Version
+1.0.0

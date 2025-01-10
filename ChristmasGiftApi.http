@@ -1,0 +1,6 @@
+@ChristmasGiftApi_HostAddress = http://localhost:5155
+
+GET {{ChristmasGiftApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
