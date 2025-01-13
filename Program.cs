@@ -102,19 +102,17 @@ builder.Services.AddScoped<ISettingsService, SettingsService>();
 builder.Services.AddMemoryCache();
 
 var app = builder.Build();
-Console.WriteLine($"Configuration values loaded:");
-Console.WriteLine($"ASPNETCORE_URLS: {Environment.GetEnvironmentVariable("ASPNETCORE_URLS")}");
-Console.WriteLine($"WEBSITES_PORT: {Environment.GetEnvironmentVariable("WEBSITES_PORT")}");
-app.Urls.Add("http://*:8080");  // Make sure this is added
+//Console.WriteLine($"Configuration values loaded:");
+//Console.WriteLine($"ASPNETCORE_URLS: {Environment.GetEnvironmentVariable("ASPNETCORE_URLS")}");
+//Console.WriteLine($"WEBSITES_PORT: {Environment.GetEnvironmentVariable("WEBSITES_PORT")}");
+//app.Urls.Add("http://*:8080");  // Make sure this is added
 
 Console.WriteLine("Application built and configured, starting...");
 
 // Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.UseHttpsRedirection();
 
