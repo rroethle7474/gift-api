@@ -1,5 +1,3 @@
-// Services/NotificationService.cs
-using Azure.Communication.Sms;
 using ChristmasGiftApi.Interfaces;
 using ChristmasGiftApi.Models;
 using Microsoft.Extensions.Options;
@@ -13,7 +11,6 @@ public class NotificationService : INotificationService
     private readonly NotificationSettings _settings;
     private readonly ILogger<NotificationService> _logger;
     private readonly SendGridClient _sendGridClient;
-    private readonly SmsClient _smsClient;
 
     public NotificationService(
         IOptions<NotificationSettings> settings,
@@ -22,7 +19,6 @@ public class NotificationService : INotificationService
         _settings = settings.Value;
         _logger = logger;
         _sendGridClient = new SendGridClient(_settings.SendGridApiKey);
-        _smsClient = new SmsClient(_settings.AzureCommunicationServiceConnectionString);
     }
 
     public async Task SendEmailAsync(string to, string subject, string htmlContent)
@@ -63,37 +59,6 @@ public class NotificationService : INotificationService
             _logger.LogError(ex, "Error sending multiple emails");
             throw;
         }
-    }
-
-    public async Task SendSmsAsync(string to, string message)
-    {
-        try
-        {
-            var response = await _smsClient.SendAsync(
-                from: _settings.SmsFromNumber,
-                to: to,
-                message: message);
-
-            if (response.Value.Successful)
-            {
-                _logger.LogInformation("SMS sent successfully to {To}", to);
-            }
-            else
-            {
-                _logger.LogError("Failed to send SMS to {To}", to);
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error sending SMS to {To}", to);
-            throw;
-        }
-    }
-
-    public async Task SendMultipleSmsAsync(IEnumerable<string> to, string message)
-    {
-        var tasks = to.Select(phoneNumber => SendSmsAsync(phoneNumber, message));
-        await Task.WhenAll(tasks);
     }
 
     private SendGridMessage CreateEmailMessage(IEnumerable<string> to, string subject, string htmlContent)

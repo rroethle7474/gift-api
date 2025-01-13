@@ -51,23 +51,6 @@ public class WishListNotificationService
                 //await _notificationService.SendEmailsAsync(emailRecipients, subject, htmlContent);
             }
 
-            // Send SMS
-            var phoneRecipients = new List<string>();
-            if (!string.IsNullOrWhiteSpace(user.ParentPhone1))
-                phoneRecipients.Add(user.ParentPhone1);
-            if (!string.IsNullOrWhiteSpace(user.ParentPhone2))
-                phoneRecipients.Add(user.ParentPhone2);
-
-            phoneRecipients.Add("+12622247014"); // this is the default phone to send to
-
-
-            if (phoneRecipients.Any())
-            {
-                // remove duplicates from phoneRecipients
-                phoneRecipients = phoneRecipients.Distinct().ToList();
-                string message = user?.Name != null ? $"{user.Name} has a wish list ready for approval" : "A wish list is ready for approval" ;
-                await _notificationService.SendMultipleSmsAsync(phoneRecipients, message);
-            }
         }
         catch (Exception ex)
         {
