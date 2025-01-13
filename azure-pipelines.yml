@@ -68,7 +68,6 @@ stages:
             inputs:
               azureSubscription: 'Gift'
               KeyVaultName: 'test-key-vault-v2'
-              SecretsFilter: 'GiftApi--*'
               RunAsPreJob: false
 
           - task: AzureWebApp@1
@@ -104,7 +103,6 @@ stages:
             inputs:
               azureSubscription: 'Gift'
               KeyVaultName: 'prod-key-vault-v1'
-              SecretsFilter: 'GiftApi--*'
               RunAsPreJob: false
 
           - task: AzureWebApp@1
@@ -114,8 +112,8 @@ stages:
               package: '$(Pipeline.Workspace)/webapi/*.zip'
               deploymentMethod: 'auto'
               appSettings: |
-                -ConnectionStrings__DefaultConnection "@Microsoft.KeyVault(SecretUri=https://gift-api-prod-kv.vault.azure.net/secrets/GiftApi--DefaultConnection)"
-                -NotificationSettings__SendGridApiKey "@Microsoft.KeyVault(SecretUri=https://gift-api-prod-kv.vault.azure.net/secrets/GiftApi--SendGridApiKey)"
-                -NotificationSettings__SendGridFromEmail "@Microsoft.KeyVault(SecretUri=https://gift-api-prod-kv.vault.azure.net/secrets/GiftApi--SendGridFromEmail)"
-                -NotificationSettings__SendGridFromName "@Microsoft.KeyVault(SecretUri=https://gift-api-prod-kv.vault.azure.net/secrets/GiftApi--SendGridFromName)"
-                -Jwt__Key "@Microsoft.KeyVault(SecretUri=https://gift-api-prod-kv.vault.azure.net/secrets/GiftApi--JwtKey)"
+                -ConnectionStrings__DefaultConnection "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/GiftApi--DefaultConnection)"
+                -NotificationSettings__SendGridApiKey "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/GiftApi--SendGridApiKey)"
+                -NotificationSettings__SendGridFromEmail "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/GiftApi--SendGridFromEmail)"
+                -NotificationSettings__SendGridFromName "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/GiftApi--SendGridFromName)"
+                -Jwt__Key "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/GiftApi--JwtKey)"
