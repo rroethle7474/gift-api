@@ -78,11 +78,11 @@ stages:
               package: '$(Pipeline.Workspace)/webapi/*.zip'
               deploymentMethod: 'auto'
               appSettings: |
-                -ConnectionStrings__DefaultConnection "@Microsoft.KeyVault(SecretUri=https://gift-api-test-kv.vault.azure.net/secrets/GiftApi--DefaultConnection)"
-                -NotificationSettings__SendGridApiKey "@Microsoft.KeyVault(SecretUri=https://gift-api-test-kv.vault.azure.net/secrets/GiftApi--SendGridApiKey)"
-                -NotificationSettings__SendGridFromEmail "@Microsoft.KeyVault(SecretUri=https://gift-api-test-kv.vault.azure.net/secrets/GiftApi--SendGridFromEmail)"
-                -NotificationSettings__SendGridFromName "@Microsoft.KeyVault(SecretUri=https://gift-api-test-kv.vault.azure.net/secrets/GiftApi--SendGridFromName)"
-                -Jwt__Key "@Microsoft.KeyVault(SecretUri=https://gift-api-test-kv.vault.azure.net/secrets/GiftApi--JwtKey)"
+                -ConnectionStrings__DefaultConnection "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/GiftApi--DefaultConnection)"
+                -NotificationSettings__SendGridApiKey "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/GiftApi--SendGridApiKey)"
+                -NotificationSettings__SendGridFromEmail "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/GiftApi--SendGridFromEmail)"
+                -NotificationSettings__SendGridFromName "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/GiftApi--SendGridFromName)"
+                -Jwt__Key "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/GiftApi--JwtKey)"
                 
 - stage: DeployToProd
   dependsOn: DeployToTest
