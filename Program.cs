@@ -129,14 +129,16 @@ app.MapControllers();
 
 try
 {
-    Log.Information("Starting web application");
+    Console.WriteLine($"Let's run it");
     app.Run();
 }
 catch (Exception ex)
 {
+    Console.WriteLine(ex.ToString());
     Log.Fatal(ex, "Application terminated unexpectedly");
 }
 finally
 {
+    Console.WriteLine("FLUSHING LOGS");
     Log.CloseAndFlush();
 }
