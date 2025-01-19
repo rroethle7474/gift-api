@@ -6,6 +6,7 @@ public class UserDto
     public string Username { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public bool IsAdmin { get; set; }
+    public bool IsGuestUser { get; set; }
     public bool IsParent { get; set; }
     public decimal? SpendingLimit { get; set; }
     public string? SillyDescription { get; set; }
@@ -25,6 +26,7 @@ public class CreateUserDto
     public string Email { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public bool IsAdmin { get; set; }
+    public bool IsGuestUser { get; set; }
     public decimal? SpendingLimit { get; set; }
     public string? SillyDescription { get; set; }
     public string? GreetingMessage { get; set; }
@@ -41,6 +43,7 @@ public class UpdateUserDto
     public string? Email { get; set; }
     public string? Name { get; set; }
     public bool? IsAdmin { get; set; }
+    public bool? IsGuestUser { get; set; }
     public decimal? SpendingLimit { get; set; }
     public string? SillyDescription { get; set; }
     public string? GreetingMessage { get; set; }

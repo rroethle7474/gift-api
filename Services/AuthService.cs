@@ -55,7 +55,8 @@ public class AuthService : IAuthService
                     ParentEmail2 = user.ParentEmail2,
                     ParentPhone1 = user.ParentPhone1,
                     ParentPhone2 = user.ParentPhone2,
-                    Birthday = user.Birthday
+                    Birthday = user.Birthday,
+                    IsGuestUser = user.IsGuestUser
 
 
                 }
@@ -102,6 +103,7 @@ public class AuthService : IAuthService
             new(ClaimTypes.Name, user.Username),
             new(ClaimTypes.Email, user.Email),
             new("IsAdmin", user.IsAdmin.ToString()),
+            new("IsGuestUser", user.IsGuestUser.ToString())
         };
 
         var token = new JwtSecurityToken(

@@ -56,6 +56,7 @@ public class UserService : IBaseService<UserDto, CreateUserDto, UpdateUserDto>
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(createDto.Password),
                 OriginalPassword = createDto.Password,
                 IsAdmin = createDto.IsAdmin,
+                IsGuestUser = createDto.IsGuestUser,
                 Name = createDto.Name,
                 SpendingLimit = createDto.SpendingLimit,
                 SillyDescription = createDto.SillyDescription,
@@ -96,6 +97,8 @@ public class UserService : IBaseService<UserDto, CreateUserDto, UpdateUserDto>
                 user.Name = updateDto.Name;
             if (updateDto.IsAdmin.HasValue)
                 user.IsAdmin = updateDto.IsAdmin.Value;
+            if (updateDto.IsGuestUser.HasValue)
+                user.IsGuestUser = updateDto.IsGuestUser.Value;
             if (updateDto.SpendingLimit.HasValue)
                 user.SpendingLimit = updateDto.SpendingLimit;
             if (updateDto.SillyDescription != null) // Allow empty string
@@ -151,6 +154,7 @@ public class UserService : IBaseService<UserDto, CreateUserDto, UpdateUserDto>
             Email = user.Email,
             Name = user.Name,
             IsAdmin = user.IsAdmin,
+            IsGuestUser = user.IsGuestUser,
             SpendingLimit = user.SpendingLimit,
             SillyDescription = user.SillyDescription,
             GreetingMessage = user.GreetingMessage,
@@ -158,7 +162,7 @@ public class UserService : IBaseService<UserDto, CreateUserDto, UpdateUserDto>
             ParentEmail2 = user.ParentEmail2,
             ParentPhone1 = user.ParentPhone1,
             ParentPhone2 = user.ParentPhone2,
-            Birthday = user.Birthday
+            Birthday = user.Birthday,
         };
     }
 } 

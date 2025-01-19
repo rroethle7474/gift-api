@@ -237,6 +237,7 @@ public class UsersController : ControllerBase
                 Username = azureUser.DisplayName ?? azureUser.UserPrincipalName?.Split('@')[0] ?? "Unknown",
                 Email = azureUser.Mail ?? azureUser.UserPrincipalName ?? string.Empty,
                 IsAdmin = false, // Set default values
+                IsGuestUser = false,
                 SpendingLimit = null,
                 SillyDescription = null,
                 GreetingMessage = null

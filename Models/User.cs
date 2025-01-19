@@ -18,6 +18,7 @@ public class User
     public string Name { get; set; } = string.Empty;
 
     public bool IsAdmin { get; set; }
+    public bool IsGuestUser { get; set; }
     public decimal? SpendingLimit { get; set; }
     
     [MaxLength(500)]
