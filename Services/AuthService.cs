@@ -31,9 +31,12 @@ public class AuthService : IAuthService
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Username == loginDto.Username);
 
-            if (user == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
+            if (!loginDto.IsGuestUser)
             {
-                return null;
+                if (user == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
+                {
+                    return null;
+                }
             }
 
             var token = GenerateJwtToken(user);
