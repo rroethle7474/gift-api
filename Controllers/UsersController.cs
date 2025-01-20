@@ -1,6 +1,7 @@
 using Azure.Identity;
 using ChristmasGiftApi.DTOs;
 using ChristmasGiftApi.Interfaces;
+using ChristmasGiftApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Graph;
 
@@ -11,6 +12,7 @@ namespace ChristmasGiftApi.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly IBaseService<UserDto, CreateUserDto, UpdateUserDto> _userService;
+    private readonly IBaseService<WishListSubmissionDto, CreateWishListSubmissionDto, UpdateWishListSubmissionDto> _submissionService;
     private readonly IAuthService _authService;
     private readonly ILogger<UsersController> _logger;
     private readonly IConfiguration _configuration;
@@ -19,12 +21,14 @@ public class UsersController : ControllerBase
         IBaseService<UserDto, CreateUserDto, UpdateUserDto> userService, 
         ILogger<UsersController> logger,
         IConfiguration configuration,
-        IAuthService authService)
+        IAuthService authService,
+        IBaseService<WishListSubmissionDto, CreateWishListSubmissionDto, UpdateWishListSubmissionDto> submissionService)
     {
         _userService = userService;
         _logger = logger;
         _configuration = configuration;
         _authService = authService;
+        _submissionService = submissionService;
     }
 
     [HttpGet]
@@ -130,6 +134,41 @@ public class UsersController : ControllerBase
         {
             _logger.LogError(ex, "Error during login");
             return StatusCode(500, "An error occurred while processing your request.");
+        }
+    }
+
+    [HttpPost("logout")]
+    public async Task<ActionResult<bool>> Logout(LogoutDto logoutDto)
+    {
+        try
+        {
+            if(!logoutDto.IsGuestUser)
+            {
+                return Ok(true);
+            }
+
+            if (_userService is UserService userService && _submissionService is WishListSubmissionService submissionService)
+            {
+                var logoutResponse = await userService.Logout(logoutDto);
+                if (logoutResponse == null)
+                {
+                    return StatusCode(500, "An error occurred during logout. Please contact admin.");
+                }
+
+                var wishListSubmission = await submissionService.GetByUserIdAsync(logoutResponse.UserId);
+                foreach(var sub in wishListSubmission)
+                {
+                    await submissionService.DeleteAsync(sub.SubmissionId);
+                }
+
+                return Ok(true);
+            }
+            return StatusCode(500, "Service not available.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error during logout");
+            return StatusCode(500, "An error occured during logout. Please contact admin.");
         }
     }
 

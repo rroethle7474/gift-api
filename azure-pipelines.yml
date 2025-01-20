@@ -51,6 +51,8 @@ stages:
 - stage: DeployToTest
   dependsOn: Build
   condition: succeeded()
+  variables:
+    - group: Gift-Test-Variables
   jobs:
   - deployment: DeployTest
     environment: 'test'
@@ -77,6 +79,7 @@ stages:
               package: '$(Pipeline.Workspace)/webapi/*.zip'
               deploymentMethod: 'auto'
               appSettings: >-
+                  -NotificationSettings__BaseApprovalUrl "$(BaseApprovalUrl)"
                   -ConnectionStrings__DefaultConnection "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/GiftApi--DefaultConnection)"
                   -NotificationSettings__SendGridApiKey "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/GiftApi--SendGridApiKey)"
                   -NotificationSettings__SendGridFromEmail "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/GiftApi--SendGridFromEmail)"
@@ -86,6 +89,8 @@ stages:
 - stage: DeployToProd
   dependsOn: DeployToTest
   condition: succeeded()
+  variables:
+    - group: Gift-Prod-Variables
   jobs:
   - deployment: DeployProd
     environment: 'production'
@@ -112,6 +117,7 @@ stages:
               package: '$(Pipeline.Workspace)/webapi/*.zip'
               deploymentMethod: 'auto'
               appSettings: >-
+                -NotificationSettings__BaseApprovalUrl "$(BaseApprovalUrl)"
                 -ConnectionStrings__DefaultConnection "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/GiftApi--DefaultConnection)"
                 -NotificationSettings__SendGridApiKey "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/GiftApi--SendGridApiKey)"
                 -NotificationSettings__SendGridFromEmail "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/GiftApi--SendGridFromEmail)"

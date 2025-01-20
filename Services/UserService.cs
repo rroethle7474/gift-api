@@ -145,6 +145,29 @@ public class UserService : IBaseService<UserDto, CreateUserDto, UpdateUserDto>
         }
     }
 
+    public async Task<UserDto?> Logout(LogoutDto logoutDto)
+    {
+        try
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == logoutDto.Username);
+            if (user == null) return null;
+
+            if (user.IsGuestUser)
+            {
+                user.LastModifiedDate = DateTime.UtcNow;
+                user.SpendingLimit = 100;
+                await _context.SaveChangesAsync();
+            }
+
+            return MapToDto(user);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error during logout for user {Username}", logoutDto.Username);
+            throw;
+        }
+    }
+
     private static UserDto MapToDto(User user)
     {
         return new UserDto

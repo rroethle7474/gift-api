@@ -85,7 +85,7 @@ public class WishListSubmissionController : ControllerBase
         {
             var submission = await _submissionService.CreateAsync(createDto);
             await _notificationService.SendWishListApprovalNotificationsAsync(
-                   submission.UserId);
+                   submission.UserId, submission.SubmissionId);
             return CreatedAtAction(nameof(GetSubmission), new { id = submission.SubmissionId }, submission);
         }
         catch (Exception ex)
@@ -110,7 +110,7 @@ public class WishListSubmissionController : ControllerBase
             if (updateDto.StatusId == 1)
             {
                 await _notificationService.SendWishListApprovalNotificationsAsync(
-                    submission.UserId);
+                    submission.UserId, submission.SubmissionId);
             }
 
             return Ok(submission);
