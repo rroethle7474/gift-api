@@ -53,13 +53,14 @@ builder.Services.AddSwaggerGen(c =>
 // Configure CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("LocalDevelopment",
+    options.AddPolicy("AllowAll",
         builder => builder
-            .WithOrigins("http://localhost:4200")
+            .AllowAnyOrigin()
             .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials());
+            .AllowAnyHeader());
 });
+
+
 
 // Add JWT authentication
 builder.Services.AddAuthentication(options =>
@@ -117,7 +118,7 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 // Use CORS before authorization
-app.UseCors("LocalDevelopment");
+app.UseCors("AllowAll");
 
 // Add authentication middleware
 app.UseAuthentication();
