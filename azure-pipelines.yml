@@ -80,7 +80,7 @@ stages:
               deploymentMethod: 'auto'
               appSettings: >-
                   -NotificationSettings__BaseApprovalUrl "$(BaseApprovalUrl)"
-                  -ConnectionStrings__DefaultConnection "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/GiftApi--DefaultConnection)"
+                  -ConnectionStrings__DefaultConnection "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/ProjectDb--SQL-DefaultConnectionString)"
                   -NotificationSettings__SendGridApiKey "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/GiftApi--SendGridApiKey)"
                   -NotificationSettings__SendGridFromEmail "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/GiftApi--SendGridFromEmail)"
                   -NotificationSettings__SendGridFromName "@Microsoft.KeyVault(SecretUri=https://test-key-vault-v2.vault.azure.net/secrets/GiftApi--SendGridFromName)"
@@ -118,7 +118,7 @@ stages:
               deploymentMethod: 'auto'
               appSettings: >-
                 -NotificationSettings__BaseApprovalUrl "$(BaseApprovalUrl)"
-                -ConnectionStrings__DefaultConnection "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/GiftApi--DefaultConnection)"
+                -ConnectionStrings__DefaultConnection "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/ProjectDb--SQL-DefaultConnectionString)"
                 -NotificationSettings__SendGridApiKey "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/GiftApi--SendGridApiKey)"
                 -NotificationSettings__SendGridFromEmail "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/GiftApi--SendGridFromEmail)"
                 -NotificationSettings__SendGridFromName "@Microsoft.KeyVault(SecretUri=https://prod-key-vault-v1.vault.azure.net/secrets/GiftApi--SendGridFromName)"
