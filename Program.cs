@@ -101,6 +101,10 @@ builder.Services.AddScoped<WishListNotificationService>();
 builder.Services.AddScoped<ISettingsService, SettingsService>();
 
 builder.Services.AddMemoryCache();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var jwtKey = builder.Configuration["Jwt:Key"];
+Console.WriteLine($"Connection String: {connectionString}");
+Console.WriteLine($"JWT Key: {jwtKey}");
 
 var app = builder.Build();
 //Console.WriteLine($"Configuration values loaded:");
