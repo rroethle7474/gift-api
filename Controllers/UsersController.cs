@@ -133,7 +133,7 @@ public class UsersController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error during login");
-            return StatusCode(500, "An error occurred while processing your request.");
+            return StatusCode(500, ex.ToString());
         }
     }
 
